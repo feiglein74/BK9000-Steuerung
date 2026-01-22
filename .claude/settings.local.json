@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ping:*)",
+      "Bash(powershell:*)",
+      "Bash(pip install:*)",
+      "Bash(python:*)",
+      "Bash(curl:*)",
+      "WebSearch",
+      "WebFetch(domain:10.0.0.7)",
+      "WebFetch(domain:infosys.beckhoff.com)",
+      "Bash(del \"C:\\\\Users\\\\LattePanda\\\\BK9000-ModbusTCP\\\\diag.py\")",
+      "Bash(git init:*)",
+      "Bash(git add:*)"
+    ]
+  }
+}
