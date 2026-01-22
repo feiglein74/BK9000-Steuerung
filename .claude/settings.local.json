@@ -11,7 +11,9 @@
       "WebFetch(domain:infosys.beckhoff.com)",
       "Bash(del \"C:\\\\Users\\\\LattePanda\\\\BK9000-ModbusTCP\\\\diag.py\")",
       "Bash(git init:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nInitial commit: BK9000 Modbus TCP control\n\n- config.py: IP/Port configuration\n- daemon.py: Main controller with watchdog disable\n- cmd.py: Command sender for daemon\n- init.py: Standalone watchdog disable\n- out.py: Simple output control\n- status.py: Full diagnostics and health check\n- watcher.py: Auto-recovery after BK9000 reboot\n- ads_test.py: ADS protocol exploration\n- CLAUDE.md: Project documentation\n- KL-MODULE.md: KL terminal reference\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git commit:*)"
     ]
   }
 }
