@@ -1,19 +1,19 @@
-# BK9000 Modbus TCP Control
+# BK9000 Modbus TCP Steuerung
 
 Python-Steuerung für Beckhoff BK9000 Bus Coupler mit KL-Terminals.
 
 ## Hardware
 
 - **BK9000** Bus Coupler (IP: 10.0.0.7, Port: 502)
-- **6x KL1114** (4-channel digital input, 24V DC) = 24 inputs
-- **5x KL2134** (4-channel digital output, 24V DC) = 20 outputs
-- **1x KL9010** (end terminal)
+- **6x KL1114** (4-Kanal Digital-Eingang, 24V DC) = 24 Eingänge
+- **5x KL2134** (4-Kanal Digital-Ausgang, 24V DC) = 20 Ausgänge
+- **1x KL9010** (Endklemme)
 
 ```
 BK9000 → KL1114(x6) → KL2134(x5) → KL9010
 ```
 
-Output-Adressierung läuft vom KL9010 rückwärts (Output 0-3 = KL2134 nächst am KL9010).
+Ausgang-Adressierung läuft vom KL9010 rückwärts (Ausgang 0-3 = KL2134 nächst am KL9010).
 
 **KL2134 LED Layout (pro Modul):**
 ```
@@ -22,7 +22,7 @@ Output-Adressierung läuft vom KL9010 rückwärts (Output 0-3 = KL2134 nächst a
 │  2   3  │
 └─────────┘
 ```
-Outputs pro Modul: #1=0-3, #2=4-7, #3=8-11, #4=12-15, #5=16-19
+Ausgänge pro Modul: #1=0-3, #2=4-7, #3=8-11, #4=12-15, #5=16-19
 
 ## Installation
 
@@ -32,30 +32,30 @@ pip install pymodbus
 
 ## Wichtig: Watchdog
 
-Der BK9000 hat einen aggressiven Watchdog der Outputs nach Verbindungsverlust sperrt. **Muss bei jedem Boot deaktiviert werden:**
+Der BK9000 hat einen aggressiven Watchdog der Ausgänge nach Verbindungsverlust sperrt. **Muss bei jedem Boot deaktiviert werden:**
 
 ```python
 client.write_register(0x1120, 0)   # Timeout = 0
-client.write_register(0x1122, 2)   # Mode = Disabled
+client.write_register(0x1122, 2)   # Modus = Deaktiviert
 ```
 
-`daemon.py` macht das automatisch. Ohne Deaktivierung brauchen Outputs einen BK9000 Neustart nach jedem Disconnect.
+`daemon.py` macht das automatisch. Ohne Deaktivierung brauchen Ausgänge einen BK9000 Neustart nach jedem Disconnect.
 
 ## Verwendung
 
-**Daemon starten (nach BK9000 Power-On):**
+**Daemon starten (nach BK9000 Einschalten):**
 ```bash
 python daemon.py
 ```
 
 **Befehle senden:**
 ```bash
-python cmd.py on 0          # Output 0 an
-python cmd.py off 0         # Output 0 aus
-python cmd.py on 0,1,2,3    # Mehrere Outputs an
-python cmd.py all on        # Alle 20 Outputs an
-python cmd.py all off       # Alle Outputs aus
-python cmd.py test          # Alle Outputs durchlaufen
+python cmd.py on 0          # Ausgang 0 an
+python cmd.py off 0         # Ausgang 0 aus
+python cmd.py on 0,1,2,3    # Mehrere Ausgänge an
+python cmd.py all on        # Alle 20 Ausgänge an
+python cmd.py all off       # Alle Ausgänge aus
+python cmd.py test          # Alle Ausgänge durchlaufen
 python cmd.py status        # I/O Status anzeigen
 ```
 
@@ -83,7 +83,7 @@ python watcher.py
 | `daemon.py` | Hauptcontroller - Watchdog deaktivieren, Befehle verarbeiten |
 | `cmd.py` | Befehle an laufenden Daemon senden |
 | `init.py` | Watchdog einzeln deaktivieren |
-| `out.py` | Einfache Output-Steuerung (ohne Daemon) |
+| `out.py` | Einfache Ausgang-Steuerung (ohne Daemon) |
 | `status.py` | Diagnose - Terminal-Anzahl und I/O-Status |
 | `watcher.py` | Auto-Recovery nach BK9000-Neustart |
 | `ads_test.py` | ADS-Protokoll Exploration |
@@ -92,28 +92,28 @@ python watcher.py
 
 | Register | Funktion |
 |----------|----------|
-| Coils 0-19 (FC01/05) | Digital Outputs (KL2134) |
-| Discrete Inputs 0-23 (FC02) | Digital Inputs (KL1114) |
-| 0x1000 | Coupler Info (ASCII: Model/Firmware) |
-| 0x1012 | Digital Output Anzahl (20 = OK) |
-| 0x1013 | Digital Input Anzahl (24 = OK) |
+| Coils 0-19 (FC01/05) | Digitale Ausgänge (KL2134) |
+| Discrete Inputs 0-23 (FC02) | Digitale Eingänge (KL1114) |
+| 0x1000 | Coupler Info (ASCII: Modell/Firmware) |
+| 0x1012 | Anzahl digitale Ausgänge (20 = OK) |
+| 0x1013 | Anzahl digitale Eingänge (24 = OK) |
 | 0x1120 | Watchdog Timeout (0 = aus) |
-| 0x1122 | Watchdog Mode (1=enabled, 2=disabled) |
+| 0x1122 | Watchdog Modus (1=aktiv, 2=deaktiviert) |
 
-## Troubleshooting
+## Fehlerbehebung
 
-**Outputs reagieren nicht:**
+**Ausgänge reagieren nicht:**
 1. Läuft der Daemon?
 2. BK9000 aus/ein, dann sofort `python daemon.py`
 
-**Connection Timeout:**
+**Verbindungs-Timeout:**
 1. IP in `config.py` prüfen
 2. Netzwerk: `ping 10.0.0.7`
 3. Port: `Test-NetConnection -ComputerName 10.0.0.7 -Port 502`
 
 **LED-Verhalten:**
-- KL1114: LEDs zeigen Input-Status (24V = AN)
-- KL2134: LEDs zeigen Output-Status, brauchen 24V auf Power-Kontakten
+- KL1114: LEDs zeigen Eingang-Status (24V = AN)
+- KL2134: LEDs zeigen Ausgang-Status, brauchen 24V auf Power-Kontakten
 
 ## KL1114 Verdrahtung
 
@@ -145,7 +145,7 @@ python watcher.py
 BK9000 unterstützt eingeschränktes ADS neben Modbus TCP.
 
 - **Port 100**: Register-Zugriff (nur lesen)
-- **Port 300**: Fieldbus-Daten (nur Inputs)
+- **Port 300**: Feldbus-Daten (nur Eingänge)
 
 Für praktische Nutzung ist Modbus TCP besser. ADS-Implementierung (ca. 2000) sehr limitiert.
 

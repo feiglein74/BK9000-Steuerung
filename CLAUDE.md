@@ -12,7 +12,7 @@ BK9000 Modbus TCP Steuerung. Siehe README.md für Details.
 Bei jedem Modbus-Code der Outputs schreibt: Watchdog muss deaktiviert sein!
 ```python
 client.write_register(0x1120, 0)   # Timeout = 0
-client.write_register(0x1122, 2)   # Mode = Disabled
+client.write_register(0x1122, 2)   # Modus = Deaktiviert
 ```
 
 ### pymodbus API
@@ -34,7 +34,7 @@ Output 0-3 = KL2134 nächst am KL9010 (von hinten nach vorne nummeriert).
 
 ## Code-Stil
 
-- Deutsch für User-Output, Englisch für Code/Kommentare
+- Deutsch für Benutzer-Ausgaben und Dokumentation
 - Einfach halten - keine Über-Abstraktion
 - config.py für Konfiguration nutzen
 
